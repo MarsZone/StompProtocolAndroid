@@ -50,6 +50,8 @@ public class StompClient {
     private List<StompHeader> headers;
     private HeartBeatTask heartBeatTask;
 
+    private String topicId;
+
     public StompClient(ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
         streamMap = new ConcurrentHashMap<>();
@@ -252,8 +254,14 @@ public class StompClient {
         return streamMap.get(destPath);
     }
 
+    public getTopics(){
+        return this.topicId;
+    }
+
     private Completable subscribePath(String destinationPath, @Nullable List<StompHeader> headerList) {
-        String topicId = UUID.randomUUID().toString();
+//        String topicId = UUID.randomUUID().toString();
+        String topicId = UuidGen.generateShortUuid();
+        this.topicId = topicId;
 
         if (topics == null) topics = new ConcurrentHashMap<>();
 
