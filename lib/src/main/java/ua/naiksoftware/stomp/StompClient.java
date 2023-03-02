@@ -254,7 +254,7 @@ public class StompClient {
         return streamMap.get(destPath);
     }
 
-    public getTopics(){
+    public String getTopics(){
         return this.topicId;
     }
 
