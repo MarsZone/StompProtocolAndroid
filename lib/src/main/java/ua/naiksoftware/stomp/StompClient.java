@@ -50,6 +50,7 @@ public class StompClient {
     private List<StompHeader> headers;
     private HeartBeatTask heartBeatTask;
 
+    private String topicId;
     private String connectedUserName;
 
     public StompClient(ConnectionProvider connectionProvider) {
@@ -146,9 +147,7 @@ public class StompClient {
                 .subscribe(stompMessage -> {
                     List<StompHeader> headerList = stompMessage.getStompHeaders();
                     for(StompHeader header : headerList){
-                        if(header.getKey.equals("user-name")){
-                            this.connectedUserName = header.getValue();
-                        }
+                        Log.e(TAG,"Header"+header.getKey+"_"header.getValue);
                     }
                     getConnectionStream().onNext(true);
                 }, onError -> {
