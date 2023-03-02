@@ -147,7 +147,7 @@ public class StompClient {
                 .subscribe(stompMessage -> {
                     List<StompHeader> headerList = stompMessage.getStompHeaders();
                     for(StompHeader header : headerList){
-                        Log.e(TAG,"Header"+header.getKey+"_"header.getValue);
+                        Log.d(TAG,"Header"+header.getKey()+"_"header.getValue());
                     }
                     getConnectionStream().onNext(true);
                 }, onError -> {
