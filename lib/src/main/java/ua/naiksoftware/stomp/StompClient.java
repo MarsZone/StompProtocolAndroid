@@ -33,7 +33,7 @@ public class StompClient {
 
     private static final String TAG = StompClient.class.getSimpleName();
 
-    public static final String SUPPORTED_VERSIONS = "1.1,1.2";
+    public static final String SUPPORTED_VERSIONS = "1.1";
     public static final String DEFAULT_ACK = "auto";
 
     private final ConnectionProvider connectionProvider;
@@ -50,7 +50,7 @@ public class StompClient {
     private List<StompHeader> headers;
     private HeartBeatTask heartBeatTask;
 
-    private String topicId;
+    private String connectedUserName;
 
     public StompClient(ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
@@ -144,10 +144,19 @@ public class StompClient {
                 .doOnNext(getMessageStream()::onNext)
                 .filter(msg -> msg.getStompCommand().equals(StompCommand.CONNECTED))
                 .subscribe(stompMessage -> {
+                    List<StompHeader> headerList = stompMessage.getStompHeaders();
+                    for(StompHeader header : headerList){
+                        if(header.getKey.equals("user-name")){
+                            this.connectedUserName = header.getValue();
+                        }
+                    }
                     getConnectionStream().onNext(true);
                 }, onError -> {
                     Log.e(TAG, "Error parsing message", onError);
                 });
+    }
+    public String getConnectedUserName(){
+        return this.connectedUserName;
     }
 
     synchronized private BehaviorSubject<Boolean> getConnectionStream() {
